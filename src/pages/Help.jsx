@@ -41,14 +41,14 @@ export default function Help() {
 
       {/* CONTENT AREA */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8">
-        <div className="mb-6">
-          <p className="text-xs uppercase tracking-widest text-purple-400 font-bold">
-            DOKUMENTASI SISTEM
+        <div className="mb-8">
+          <p className="text-xs uppercase tracking-widest text-cyan-400 font-bold">
+            DOKUMENTASI SISTEM RESMI
           </p>
-          <h2 className="text-2xl sm:text-3xl font-bold mt-1 text-white">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-poppins mt-1 text-white">
             Fitur &amp; Langkah Penggunaan Simulator Reaktor Kartini
           </h2>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">
+          <p className="text-sm sm:text-base text-gray-300 mt-2 leading-relaxed">
             Informasi lengkap mengenai komponen, sistem kendali, prosedur keselamatan, dan operasional Simulator SIRAKA.
           </p>
         </div>

@@ -1,6 +1,6 @@
 // src/pages/Simulator.jsx
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Line as ChartLine } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -41,6 +41,22 @@ import { useReactorPhysics } from '../hooks/useReactorPhysics';
 
 export default function Simulator() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [nickname] = useState(() => {
+    return (
+      location.state?.nickname ||
+      location.state?.username ||
+      localStorage.getItem('siraka_nickname') ||
+      sessionStorage.getItem('siraka_nickname') ||
+      ''
+    );
+  });
+
+  const displayName = nickname
+    ? nickname.charAt(0).toUpperCase() + nickname.slice(1)
+    : 'Operator';
+
   const [activePOV, setActivePOV] = useState('main');
   const [warning, setWarning] = useState('');
 
@@ -183,7 +199,7 @@ export default function Simulator() {
   const statusReaktor = isTripUI ? 'SCRAM' : (simData.dayaWatt > 1.5 ? 'CRITICAL' : 'SHUTDOWN');
 
   return (
-    <div className="h-screen w-full bg-gray-950 flex flex-col font-sans text-white overflow-hidden p-0 select-none">
+    <div className="h-screen w-full bg-gray-950 flex flex-col font-sans text-white overflow-hidden p-0 select-none relative">
 
       {/* POP-UP TUTORIAL */}
       {tutorialStep > 0 && (
@@ -234,11 +250,11 @@ export default function Simulator() {
       {/* POP-UP PANEL HELP / BANTUAN (DARI TOMBOL BUKU KECIL) */}
       {showHelpModal && (
         <div 
-          className="fixed inset-0 z-[110] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
+          className="fixed inset-0 z-[110] bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6"
           onClick={() => setShowHelpModal(false)}
         >
           <div 
-            className="bg-[#0b0f19] border border-cyan-500/50 rounded-2xl w-full max-w-5xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+            className="bg-[#0b0f19] border border-cyan-500/50 rounded-2xl w-full max-w-6xl xl:max-w-7xl w-[96vw] max-h-[94vh] flex flex-col shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Modal */}
@@ -246,10 +262,10 @@ export default function Simulator() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📖</span>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-cyan-400">
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold font-poppins text-cyan-400">
                     Pusat Bantuan &amp; Panduan Simulator SIRAKA
                   </h2>
-                  <p className="text-[0.7rem] text-gray-400">
+                  <p className="text-xs sm:text-sm text-gray-400">
                     Dokumentasi resmi fitur dan langkah-langkah penggunaan Simulator Reaktor Kartini
                   </p>
                 </div>
@@ -264,7 +280,7 @@ export default function Simulator() {
             </div>
 
             {/* Konten Scrollable */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#08091C]/95">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 bg-[#08091C]/95">
               <HelpContent />
             </div>
 
@@ -314,6 +330,13 @@ export default function Simulator() {
 
         {/* KOLOM KIRI (Visual Simulator) */}
         <div className="col-span-8 bg-black relative flex items-center justify-center border border-gray-800 rounded">
+
+          {/* TULISAN HELLO PERMANEN DI KIRI, TEPAT DI BAWAH TULISAN SIMULATOR REAKTOR KARTINI */}
+          <div className="absolute top-1 sm:top-1.5 left-3 z-30 pointer-events-none select-none text-left">
+            <span className="font-serif font-normal text-base sm:text-lg md:text-[1.15rem] text-white tracking-normal leading-none drop-shadow-sm inline-block">
+              Hello, {displayName}
+            </span>
+          </div>
 
           {/* TOMBOL BUKU PANDUAN KIRI BAWAH */}
           <div className="absolute bottom-4 left-4 z-40">
